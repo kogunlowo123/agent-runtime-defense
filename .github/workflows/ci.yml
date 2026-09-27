@@ -49,7 +49,7 @@ jobs:
       - name: Run unit tests
         run: uv run pytest tests/unit/ tests/security/ -v --tb=short --cov=services --cov-report=xml
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           file: coverage.xml
           fail_ci_if_error: false
