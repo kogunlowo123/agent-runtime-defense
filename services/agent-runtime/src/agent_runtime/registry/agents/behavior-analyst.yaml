@@ -1,0 +1,19 @@
+id: behavior-analyst-v1
+name: Behavior Analyst
+version: "1.0.0"
+family: behavior-analyst
+tier: T1
+capabilities:
+  - deep_behavior_pattern_analysis
+  - baseline_comparison
+  - rag_grounded_reporting
+  - mitre_technique_correlation
+tools:
+  - rag_search
+  - behavior_query
+budget:
+  max_tokens_per_session: 100000
+  max_cost_usd: 1.00
+  max_retrieval_ops: 200
+approval_required: false
+escalation_threshold: null

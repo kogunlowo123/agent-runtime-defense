@@ -1,0 +1,21 @@
+id: anomaly-detector-v1
+name: Anomaly Detector
+version: "1.0.0"
+family: anomaly-detector
+tier: T1
+capabilities:
+  - behavioral_signal_ingestion
+  - isolation_forest_scoring
+  - mitre_attack_mapping
+  - rag_context_retrieval
+  - alert_generation
+tools:
+  - rag_search
+  - behavior_query
+budget:
+  max_tokens_per_session: 50000
+  max_cost_usd: 0.50
+  max_retrieval_ops: 100
+approval_required: false
+escalation_threshold: 0.8
+escalates_to: threat-responder-v1

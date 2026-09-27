@@ -1,0 +1,21 @@
+guardrails:
+  input_screening:
+    enabled: true
+    block_prompt_injection: true
+    block_jailbreak_patterns: true
+    max_input_tokens: 8192
+
+  grounding_check:
+    enabled: true
+    min_citation_score: 0.6
+    require_source_citation: true
+
+  citation_validator:
+    enabled: true
+    min_sources_required: 1
+    reject_hallucinated_citations: true
+
+  output_filtering:
+    enabled: true
+    strip_pii: false  # PII removal handled at ingestion
+    max_output_tokens: 4096

@@ -1,0 +1,36 @@
+title: Agent Token Burn Anomaly
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+status: experimental
+description: |
+  Detects AI agents consuming an anomalously high number of tokens in a short
+  window, which may indicate prompt injection, runaway loop, or exfiltration attempt.
+references:
+  - https://attack.mitre.org/techniques/T1041/
+author: Agent Runtime Defense Team
+date: 2024/01/15
+modified: 2024/01/15
+tags:
+  - attack.exfiltration
+  - attack.t1041
+  - ai.agent.anomaly
+logsource:
+  category: application
+  product: agent-runtime-defense
+detection:
+  selection:
+    EventType: "behavior_signal"
+    token_count|gte: 500000
+    window_seconds|lte: 300
+  filter_known_batch:
+    agent_class: "batch-processor"
+  condition: selection and not filter_known_batch
+fields:
+  - principal_id
+  - agent_class
+  - token_count
+  - window_seconds
+  - mitre_technique
+falsepositives:
+  - Large document summarization tasks
+  - Legitimate batch processing agents (filtered)
+level: high

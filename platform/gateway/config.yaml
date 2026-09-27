@@ -1,0 +1,24 @@
+gateway:
+  listen_port: 8080
+  read_timeout_seconds: 30
+  write_timeout_seconds: 60
+  max_request_body_bytes: 10485760  # 10 MB
+
+auth:
+  jwks_uri: "${JWKS_URI}"
+  audience: "agent-runtime-defense"
+  issuer: "${JWT_ISSUER}"
+
+rate_limiting:
+  enabled: true
+  default_rpm: 100
+  isolation_rpm: 10
+
+budget:
+  default_max_tokens: 100000
+  default_max_requests: 1000
+
+telemetry:
+  otlp_endpoint: "${OTEL_EXPORTER_OTLP_ENDPOINT}"
+  service_name: "platform-gateway"
+  environment: "${ENVIRONMENT}"

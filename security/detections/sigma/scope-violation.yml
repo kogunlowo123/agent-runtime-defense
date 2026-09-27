@@ -1,0 +1,34 @@
+title: Agent Scope Violation Attempt
+id: c3d4e5f6-a7b8-9012-cdef-012345678902
+status: experimental
+description: |
+  Detects agents attempting to invoke tools or APIs outside their declared scope,
+  which may indicate privilege escalation or compromised agent credentials.
+references:
+  - https://attack.mitre.org/techniques/T1078/
+author: Agent Runtime Defense Team
+date: 2024/01/15
+tags:
+  - attack.privilege_escalation
+  - attack.t1078
+  - ai.agent.scope_violation
+logsource:
+  category: application
+  product: agent-runtime-defense
+detection:
+  selection:
+    EventType: "authorization_failure"
+    reason: "insufficient_scope"
+  threshold:
+    value: 3
+    timespan: 5m
+  condition: selection | count() by principal_id > 3
+fields:
+  - principal_id
+  - agent_class
+  - attempted_action
+  - required_scope
+  - caller_scopes
+falsepositives:
+  - Misconfigured agent token (non-malicious)
+level: medium

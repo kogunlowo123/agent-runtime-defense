@@ -1,0 +1,51 @@
+name: Docker Build and Push
+description: Build and push a Docker image to Azure Container Registry
+
+inputs:
+  registry:
+    description: ACR login server URL
+    required: true
+  image-name:
+    description: Image name (without registry prefix)
+    required: true
+  dockerfile:
+    description: Path to Dockerfile
+    default: "Dockerfile"
+  context:
+    description: Docker build context
+    default: "."
+  push:
+    description: Whether to push the image
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log into ACR
+      uses: azure/docker-login@v2
+      with:
+        login-server: ${{ inputs.registry }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ inputs.registry }}/${{ inputs.image-name }}
+        tags: |
+          type=sha,prefix=
+          type=ref,event=branch
+          type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ inputs.context }}
+        file: ${{ inputs.dockerfile }}
+        push: ${{ inputs.push }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max

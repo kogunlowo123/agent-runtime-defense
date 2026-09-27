@@ -1,0 +1,28 @@
+// KQL Detection: Entra ID Agent Authentication Anomaly
+// Azure Sentinel / Log Analytics
+// Detects unusual authentication patterns for AI agent service principals
+
+SigninLogs
+| where TimeGenerated >= ago(1h)
+| where AppDisplayName startswith "agent-runtime-defense"
+| where ResultType != "0"  // Failed sign-ins
+| summarize
+    FailedAttempts = count(),
+    UniqueIPs = dcount(IPAddress),
+    UniqueLocations = dcount(Location)
+    by UserPrincipalName, AppDisplayName, bin(TimeGenerated, 5m)
+| where FailedAttempts > 5 or UniqueIPs > 3
+| extend AlertSeverity = case(
+    FailedAttempts > 20 or UniqueIPs > 10, "Critical",
+    FailedAttempts > 10 or UniqueIPs > 5, "High",
+    "Medium"
+)
+| project
+    TimeGenerated,
+    UserPrincipalName,
+    AppDisplayName,
+    FailedAttempts,
+    UniqueIPs,
+    UniqueLocations,
+    AlertSeverity
+| order by FailedAttempts desc

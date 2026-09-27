@@ -1,0 +1,20 @@
+id: threat-responder-v1
+name: Threat Responder
+version: "1.0.0"
+family: threat-responder
+tier: T2
+capabilities:
+  - agent_isolation
+  - credential_revocation
+  - throttle_enforcement
+  - incident_documentation
+tools:
+  - response_execute
+  - behavior_query
+budget:
+  max_tokens_per_session: 20000
+  max_cost_usd: 0.25
+  max_retrieval_ops: 20
+approval_required: true
+approval_scope_required: T2
+max_session_duration_seconds: 1800

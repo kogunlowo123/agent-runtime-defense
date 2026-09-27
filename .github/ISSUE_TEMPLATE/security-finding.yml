@@ -1,0 +1,41 @@
+name: Security Finding
+description: Report a security finding (non-critical only — use private advisory for critical/high)
+labels: [security, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **IMPORTANT**: For Critical or High severity findings, do NOT use this form.
+        Instead, use [GitHub's private security advisory](https://github.com/kogunlowo123/agent-runtime-defense/security/advisories/new).
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options: [Low, Medium]
+      description: For High/Critical, use private security advisory instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Finding description
+    validations:
+      required: true
+
+  - type: input
+    id: component
+    attributes:
+      label: Affected component
+      placeholder: "services/api/routes/v1/behavior.py"
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce (if applicable)
+
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Proposed mitigation

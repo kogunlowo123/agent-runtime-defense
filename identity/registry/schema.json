@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgentProfile",
+  "description": "Schema for agent registry entries in Agent Runtime Defense",
+  "type": "object",
+  "required": ["id", "name", "version", "family", "tier", "capabilities", "tools", "budget"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]+-v[0-9]+$",
+      "description": "Unique agent profile identifier, e.g. anomaly-detector-v1"
+    },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "family": {
+      "type": "string",
+      "enum": ["anomaly-detector", "behavior-analyst", "threat-responder"]
+    },
+    "tier": { "type": "string", "enum": ["T1", "T2"] },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "tools": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "budget": {
+      "type": "object",
+      "required": ["max_tokens_per_session", "max_cost_usd", "max_retrieval_ops"],
+      "properties": {
+        "max_tokens_per_session": { "type": "integer", "minimum": 1 },
+        "max_cost_usd": { "type": "number", "minimum": 0.001 },
+        "max_retrieval_ops": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "approval_required": { "type": "boolean" },
+    "escalation_threshold": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "escalates_to": { "type": "string" }
+  }
+}

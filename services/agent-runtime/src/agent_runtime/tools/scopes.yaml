@@ -1,0 +1,25 @@
+tools:
+  rag_search:
+    tier: T1
+    description: Search the RAG knowledge base for MITRE and threat intelligence
+    required_scopes:
+      - t1:read
+      - t2:read
+
+  behavior_query:
+    tier: T1
+    description: Query the behavior baseline API for anomaly scores
+    required_scopes:
+      - t1:read
+      - t2:read
+
+  response_execute:
+    tier: T2
+    description: Execute an automated response action (isolate, revoke, alert)
+    required_scopes:
+      - t2:response
+      - admin
+    requires_approval: true
+    approval_required_for:
+      - isolate
+      - revoke

@@ -1,0 +1,56 @@
+name: Agent Request
+description: Request a new LangGraph agent or agent family
+labels: [agent-request, enhancement]
+body:
+  - type: input
+    id: agent_name
+    attributes:
+      label: Agent name
+      placeholder: "data-exfil-detector"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Agent tier
+      options: [T1, T2]
+      description: T1 = detection/analysis, T2 = automated response (requires approval gate)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: Describe what this agent detects or responds to.
+    validations:
+      required: true
+
+  - type: textarea
+    id: signals
+    attributes:
+      label: Behavioral signals to monitor
+      placeholder: |
+        - token_count > X in window Y
+        - retrieval_count > Z
+        - specific tool call patterns
+    validations:
+      required: true
+
+  - type: textarea
+    id: mitre
+    attributes:
+      label: Relevant MITRE ATT&CK tactics/techniques
+      placeholder: "T1213 (Collection), T1041 (Exfiltration)"
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] Agent detects [specific pattern]
+        - [ ] False positive rate < X%
+        - [ ] Unit tests added
+    validations:
+      required: true

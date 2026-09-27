@@ -1,0 +1,13 @@
+apiVersion: v2
+name: agent-runtime-defense-api
+description: Agent Runtime Defense API Service
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - ai-security
+  - anomaly-detection
+  - agent-runtime
+maintainers:
+  - name: kogunlowo123
+    url: https://github.com/kogunlowo123

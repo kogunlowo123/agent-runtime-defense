@@ -1,0 +1,34 @@
+routes:
+  - path_prefix: /api/v1/behavior
+    backend: http://api:8000
+    timeout_seconds: 30
+    require_auth: true
+    rate_limit_rpm: 100
+
+  - path_prefix: /api/v1/response/isolate
+    backend: http://api:8000
+    timeout_seconds: 30
+    require_auth: true
+    rate_limit_rpm: 10
+
+  - path_prefix: /api/v1/response
+    backend: http://api:8000
+    timeout_seconds: 30
+    require_auth: true
+    rate_limit_rpm: 100
+
+  - path_prefix: /api/v1/threat
+    backend: http://api:8000
+    timeout_seconds: 30
+    require_auth: true
+    rate_limit_rpm: 100
+
+  - path_prefix: /health
+    backend: http://api:8000
+    timeout_seconds: 5
+    require_auth: false
+
+  - path_prefix: /readiness
+    backend: http://api:8000
+    timeout_seconds: 5
+    require_auth: false

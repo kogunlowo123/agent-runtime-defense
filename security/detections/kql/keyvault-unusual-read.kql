@@ -1,0 +1,29 @@
+// KQL Detection: Azure Key Vault Unusual Read Pattern
+// Azure Sentinel / Log Analytics
+// Detects bulk secret reads from Key Vault that may indicate credential harvesting
+
+AzureDiagnostics
+| where TimeGenerated >= ago(1h)
+| where ResourceType == "VAULTS"
+| where OperationName == "SecretGet"
+| where ResultType == "Success"
+| summarize
+    SecretReadCount = count(),
+    UniqueSecrets = dcount(id_s),
+    CallerIPs = make_set(CallerIPAddress, 10)
+    by CallerObjectId, CallerIPAddress, bin(TimeGenerated, 5m)
+| where SecretReadCount > 20 or UniqueSecrets > 10
+| extend AlertSeverity = case(
+    SecretReadCount > 100 or UniqueSecrets > 50, "Critical",
+    SecretReadCount > 50 or UniqueSecrets > 20, "High",
+    "Medium"
+)
+| project
+    TimeGenerated,
+    CallerObjectId,
+    CallerIPAddress,
+    SecretReadCount,
+    UniqueSecrets,
+    AlertSeverity,
+    CallerIPs
+| order by SecretReadCount desc

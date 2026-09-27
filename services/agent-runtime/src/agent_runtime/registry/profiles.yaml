@@ -1,0 +1,7 @@
+profiles:
+  - id: anomaly-detector-v1
+    path: agents/anomaly-detector.yaml
+  - id: behavior-analyst-v1
+    path: agents/behavior-analyst.yaml
+  - id: threat-responder-v1
+    path: agents/threat-responder.yaml

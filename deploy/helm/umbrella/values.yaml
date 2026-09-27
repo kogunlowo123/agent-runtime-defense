@@ -1,0 +1,5 @@
+api:
+  replicaCount: 2
+  image:
+    repository: YOUR_ACR.azurecr.io/agent-runtime-defense/api
+    tag: "0.1.0"

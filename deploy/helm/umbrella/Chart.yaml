@@ -1,0 +1,11 @@
+apiVersion: v2
+name: agent-runtime-defense
+description: Agent Runtime Defense — Umbrella Helm Chart
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: agent-runtime-defense-api
+    version: "0.1.0"
+    repository: "file://../api"
+    alias: api

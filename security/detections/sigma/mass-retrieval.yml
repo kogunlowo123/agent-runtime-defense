@@ -1,0 +1,31 @@
+title: Agent Mass Retrieval
+id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+status: experimental
+description: |
+  Detects AI agents performing an unusually high volume of vector store
+  retrieval operations, consistent with data harvesting (MITRE T1213).
+references:
+  - https://attack.mitre.org/techniques/T1213/
+author: Agent Runtime Defense Team
+date: 2024/01/15
+tags:
+  - attack.collection
+  - attack.t1213
+  - ai.agent.anomaly
+logsource:
+  category: application
+  product: agent-runtime-defense
+detection:
+  selection:
+    EventType: "behavior_signal"
+    retrieval_count|gte: 1000
+    window_seconds|lte: 60
+  condition: selection
+fields:
+  - principal_id
+  - agent_class
+  - retrieval_count
+  - window_seconds
+falsepositives:
+  - Initial RAG index population (expected to be a one-time event)
+level: high

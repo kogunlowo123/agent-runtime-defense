@@ -1,0 +1,46 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/kogunlowo123/agent-runtime-defense/agent-runtime
+  pullPolicy: IfNotPresent
+  tag: ""
+
+serviceAccount:
+  create: true
+  annotations:
+    azure.workload.identity/client-id: ""
+  name: "agent-runtime"
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9090"
+
+service:
+  type: ClusterIP
+  port: 8001
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+env:
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+  ENVIRONMENT: "production"
+
+secrets:
+  keyVaultName: ""
+  azureClientId: ""
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

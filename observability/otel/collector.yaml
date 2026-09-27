@@ -1,0 +1,63 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 1024
+
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+
+  # PII scrubbing: redact sensitive fields before export
+  attributes:
+    actions:
+      - key: user.email
+        action: delete
+      - key: http.request.body
+        action: delete
+      - key: db.statement
+        action: delete
+
+  resource:
+    attributes:
+      - key: service.version
+        value: "0.1.0"
+        action: upsert
+
+exporters:
+  otlp/azure:
+    endpoint: "${AZURE_MONITOR_OTLP_ENDPOINT}"
+    headers:
+      Authorization: "Bearer ${AZURE_MONITOR_TOKEN}"
+
+  logging:
+    verbosity: detailed
+
+  prometheus:
+    endpoint: "0.0.0.0:8888"
+    namespace: agent_runtime_defense
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, attributes, resource]
+      exporters: [otlp/azure, logging]
+
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, resource]
+      exporters: [prometheus, otlp/azure]
+
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, attributes, resource]
+      exporters: [otlp/azure, logging]
