@@ -1,10 +1,10 @@
-FROM python:3.12-slim AS builder
+FROM python:3.15-slim AS builder
 WORKDIR /app
 RUN pip install --no-cache-dir uv==0.5.0
 COPY pyproject.toml ./
 RUN uv sync --no-dev --no-install-project
 
-FROM python:3.12-slim AS runtime
+FROM python:3.15-slim AS runtime
 RUN groupadd --gid 1000 appgroup && \
     useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser
 WORKDIR /app
